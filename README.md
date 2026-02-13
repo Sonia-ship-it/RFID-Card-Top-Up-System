@@ -1,9 +1,6 @@
 
 # 🛰️ RFID Nexus | Team_07 Dashboard
 
-> A premium, real-time RFID management ecosystem powered by Node.js and IoT protocols.
-
----
 
 ## 🦾 Overview
 
@@ -42,26 +39,7 @@ card/
 
 ---
 
-## 🚀 Getting Started
 
-### 1. Prerequisites
-
-* **Node.js**: v14.0.0+
-* **NPM**: v6.0.0+
-
-### 2. Quick Start
-
-```bash
-# Clone and enter the directory
-cd card
-
-# Install dependencies
-npm install express ws mqtt cors
-
-# Launch the dashboard
-node server.js
-
-```
 
 🔗 **Access the UI:** [http://localhost:9213](http://localhost:9213)
 🔗 **Access the UI:** [http://157.173.101.159:9213](157.173.101.159:9213)
