@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RFID Dashboard - team_07</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -15,271 +15,213 @@
     }
 
     body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      position: relative;
+      font-family: 'Outfit', sans-serif;
+      background: radial-gradient(circle at top left, #2e1065, #0f172a);
+      color: #fff;
       overflow-x: hidden;
+      min-height: 100vh;
     }
 
-    /* Animated background particles */
-    .particles {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      z-index: 0;
-    }
-
-    .particle {
+    /* Animated background blobs */
+    .blob {
       position: absolute;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 50%;
-      animation: float 15s infinite;
+      filter: blur(80px);
+      z-index: -1;
+      opacity: 0.6;
+      animation: float 20s infinite alternate;
     }
+    .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #4c1d95; animation-delay: 0s; }
+    .blob-2 { bottom: -10%; right: -10%; width: 400px; height: 400px; background: #db2777; animation-delay: -5s; }
+    .blob-3 { top: 40%; left: 40%; width: 300px; height: 300px; background: #2563eb; animation-delay: -10s; }
 
     @keyframes float {
-      0%, 100% { transform: translateY(0) translateX(0); }
-      25% { transform: translateY(-100px) translateX(50px); }
-      50% { transform: translateY(-200px) translateX(-50px); }
-      75% { transform: translateY(-100px) translateX(100px); }
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(30px, 50px) scale(1.1); }
     }
 
-    .glass-card {
-      background: rgba(255, 255, 255, 0.95);
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    .credit-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
       backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      transition: transform 0.6s;
     }
 
-    .balance-card {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    .credit-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(125deg, transparent 0%, rgba(255,255,255,0.05) 30%, transparent 35%, transparent 100%);
+      transform: translateX(-100%);
+      animation: sheen 6s infinite; 
+    }
+
+    @keyframes sheen {
+        0%, 85% { transform: translateX(-100%); }
+        100% { transform: translateX(200%); }
+    }
+
+    .chip {
+      background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+      border-radius: 6px;
       position: relative;
       overflow: hidden;
     }
-
-    .balance-card::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-      animation: shimmer 3s infinite;
+    .chip::after {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        border: 1px solid rgba(0,0,0,0.1);
+        background-image: 
+            linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px);
+        background-size: 33% 33%;
+        border-radius: 5px;
     }
 
-    @keyframes shimmer {
-      0%, 100% { transform: rotate(0deg); }
-      50% { transform: rotate(180deg); }
-    }
-
-    .pulse-ring {
-      animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    }
-
-    @keyframes pulse-ring {
-      0%, 100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-      50% {
-        opacity: 0.5;
-        transform: scale(1.1);
-      }
-    }
-
-    input:focus {
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
-    }
-
-    .btn-gradient {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    .input-glass {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: white;
       transition: all 0.3s ease;
     }
-
-    .btn-gradient:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 20px 40px -15px rgba(102, 126, 234, 0.5);
+    .input-glass:focus {
+      background: rgba(0, 0, 0, 0.4);
+      border-color: rgba(255, 255, 255, 0.3);
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.05);
     }
 
-    .btn-gradient:active {
-      transform: translateY(0);
-    }
-
-    .card-shine {
+    .btn-glow {
+      background: linear-gradient(45deg, #4f46e5, #7c3aed);
       position: relative;
+      z-index: 1;
       overflow: hidden;
+      transition: all 0.3s ease;
     }
-
-    .card-shine::after {
+    .btn-glow::before {
       content: '';
       position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(
-        45deg,
-        transparent 30%,
-        rgba(255, 255, 255, 0.3) 50%,
-        transparent 70%
-      );
-      transform: rotate(45deg);
-      animation: shine 3s infinite;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(45deg, #7c3aed, #4f46e5);
+      z-index: -1;
+      transition: opacity 0.3s ease;
+      opacity: 0;
     }
-
-    @keyframes shine {
-      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-      100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    .btn-glow:hover::before { opacity: 1; }
+    .btn-glow:hover {
+      box-shadow: 0 0 20px rgba(124, 58, 237, 0.5);
+      transform: translateY(-2px);
     }
-
-    .status-success {
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      color: white;
-    }
-
-    .status-error {
-      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-      color: white;
-    }
-
-    .connection-indicator {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .btn-glow:active { transform: translateY(0); }
 
     .status-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      position: relative;
+      box-shadow: 0 0 10px currentColor;
     }
-
-    .status-dot::before {
-      content: '';
-      position: absolute;
-      inset: -4px;
-      border-radius: 50%;
-      border: 2px solid currentColor;
-      opacity: 0;
-      animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
-    }
-
-    @keyframes ping {
-      75%, 100% {
-        transform: scale(2);
-        opacity: 0;
-      }
-    }
-
-    .card-icon {
-      width: 60px;
-      height: 45px;
-      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      color: white;
-      font-size: 18px;
-      box-shadow: 0 10px 25px -5px rgba(251, 191, 36, 0.4);
-    }
+    
+    .status-success { color: #4ade80; }
+    .status-error { color: #f87171; }
   </style>
 </head>
 
-<body class="flex items-center justify-center min-h-screen p-4">
+<body class="flex items-center justify-center p-4">
 
-  <!-- Animated background particles -->
-  <div class="particles">
-    <div class="particle" style="width: 80px; height: 80px; top: 10%; left: 10%; animation-delay: 0s;"></div>
-    <div class="particle" style="width: 60px; height: 60px; top: 70%; left: 80%; animation-delay: 2s;"></div>
-    <div class="particle" style="width: 100px; height: 100px; top: 40%; left: 70%; animation-delay: 4s;"></div>
-    <div class="particle" style="width: 40px; height: 40px; top: 80%; left: 20%; animation-delay: 1s;"></div>
-    <div class="particle" style="width: 70px; height: 70px; top: 20%; left: 60%; animation-delay: 3s;"></div>
-  </div>
+  <!-- Background Blobs -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
 
   <!-- Main Container -->
-  <div class="w-full max-w-md relative z-10">
+  <div class="w-full max-w-sm relative z-10 animate-fade-in-up">
     
     <!-- Header -->
     <div class="text-center mb-8">
-      <div class="inline-flex items-center justify-center w-20 h-20 rounded-3xl mb-4 bg-white/20 backdrop-blur-lg border border-white/30 shadow-2xl">
-        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"></path>
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 bg-white/5 backdrop-blur-md border border-white/10 shadow-lg ring-1 ring-white/10">
+        <svg class="w-8 h-8 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
         </svg>
       </div>
-      <h1 class="text-4xl font-bold text-white mb-2 drop-shadow-lg">RFID Terminal</h1>
-      <p class="text-white/80 text-sm tracking-wider uppercase">team_07 • Secure Payment System</p>
+      <h1 class="text-3xl font-bold tracking-tight mb-1 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">RFID Terminal</h1>
+      <p class="text-gray-400 text-xs font-medium tracking-widest uppercase">team_07 • Secure System</p>
     </div>
 
-    <!-- Main Card -->
-    <div class="glass-card rounded-3xl p-8 mb-6 shadow-2xl">
+    <!-- Glass Panel -->
+    <div class="glass-panel rounded-3xl p-6 md:p-8">
       
       <!-- Connection Status -->
-      <div class="flex justify-between items-center mb-8 pb-6 border-b border-gray-200">
-        <div class="connection-indicator">
-          <div id="connection-dot" class="status-dot bg-red-500">
-            <span class="absolute inset-0 rounded-full bg-red-500"></span>
-          </div>
-          <span class="text-sm font-medium text-gray-700" id="status-text">Connecting...</span>
+      <div class="flex justify-between items-center mb-6">
+        <div class="flex items-center gap-3 bg-black/20 px-3 py-1.5 rounded-full border border-white/5">
+          <div id="connection-dot" class="w-2.5 h-2.5 rounded-full bg-red-500 status-dot transition-colors duration-300"></div>
+          <span class="text-xs font-medium text-gray-300" id="status-text">Connecting...</span>
         </div>
-        <div class="card-icon">VISA</div>
+        <div class="text-xs font-bold text-gray-500 tracking-wider">v2.0</div>
       </div>
 
-      <!-- Balance Display Card -->
-      <div class="balance-card card-shine rounded-2xl p-6 mb-8 shadow-xl">
-        <div class="relative z-10">
-          <p class="text-white/70 text-xs uppercase tracking-widest mb-2">Available Balance</p>
-          <p id="balance" class="text-5xl font-bold text-white mb-4">RWF 0.00</p>
+      <!-- Credit Card Display -->
+      <div class="credit-card rounded-2xl p-6 mb-8 aspect-[1.586/1]">
+        <div class="flex justify-between items-start mb-8">
+          <div class="chip w-12 h-9 shadow-inner"></div>
+          <svg class="w-8 h-8 text-white/80" fill="currentColor" viewBox="0 0 24 24">
+             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 7h2v6h-2zm0 8h2v2h-2z" opacity="0.5"/> 
+             <!-- Contactless icon simplified -->
+             <path d="M12 4c4.41 0 8 3.59 8 8h-2c0-3.31-2.69-6-6-6s-6 2.69-6 6H4c0-4.41 3.59-8 8-8zm0 4c2.21 0 4 1.79 4 4h-2c0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4z"/>
+          </svg>
+        </div>
+        
+        <div class="mt-auto">
+          <p class="text-gray-300 text-[10px] uppercase tracking-widest mb-1">Current Balance</p>
+          <p id="balance" class="text-3xl font-bold text-white tracking-wide mb-4 tabular-nums">RWF 0.00</p>
+          
           <div class="flex justify-between items-end">
             <div>
-              <p class="text-white/70 text-xs uppercase tracking-wider mb-1">Card UID</p>
-              <p id="uid" class="text-sm font-mono text-white/90 tracking-wider">-- : -- : -- : --</p>
+               <p class="text-gray-400 text-[9px] uppercase tracking-widest mb-0.5">Card Number</p>
+               <p id="uid" class="font-mono text-sm text-gray-200 tracking-wider opacity-90">-- : -- : -- : --</p>
             </div>
-            <svg class="w-12 h-12 text-white/20" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
-            </svg>
+            <div class="font-bold italic text-white/90 text-lg">VISA</div>
           </div>
         </div>
       </div>
 
-      <!-- Top-up Form -->
+      <!-- Actions -->
       <div class="space-y-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Top-up Amount (RWF)</label>
+        <div class="relative group">
+          <label class="block text-xs font-medium text-gray-400 mb-1.5 ml-1">Top-up Amount</label>
           <div class="relative">
-            <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg font-semibold">RWF</span>
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium">RWF</span>
             <input id="amt" type="number" placeholder="0.00" 
-                   class="w-full bg-gray-50 border-2 border-gray-200 text-gray-900 rounded-2xl pl-16 pr-4 py-4 text-xl font-semibold placeholder:text-gray-300 transition-all">
+                   class="input-glass w-full rounded-xl pl-14 pr-4 py-3.5 text-lg font-medium placeholder-gray-600 focus:placeholder-gray-500">
           </div>
         </div>
 
         <button onclick="topup(event)" 
-                class="btn-gradient w-full text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-3 shadow-lg">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-          </svg>
-          <span>Complete Transaction</span>
+                class="btn-glow w-full text-white font-semibold py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-lg group">
+          <span class="p-1 bg-white/20 rounded-full group-hover:scale-110 transition-transform">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
+          </span>
+          <span>Top Up Balance</span>
         </button>
 
-        <div id="status-msg" class="text-sm text-center p-4 rounded-xl font-medium hidden shadow-lg"></div>
+        <div id="status-msg" class="text-sm text-center p-3 rounded-lg font-medium hidden bg-white/5 border border-white/5 backdrop-blur-sm animate-pulse"></div>
       </div>
+
     </div>
 
     <!-- Footer -->
-    <div class="text-center">
-      <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-full px-6 py-3 border border-white/20">
-        <svg class="w-4 h-4 text-white/70" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
-        </svg>
-        <p class="text-white/70 text-xs tracking-wide uppercase">Secured by Encryption</p>
-      </div>
+    <div class="mt-8 text-center">
+      <p class="text-gray-500 text-xs">© 2026 Team 07 inc. All rights reserved.</p>
     </div>
 
   </div>
@@ -287,13 +229,15 @@
   <script>
     let currentUID = null;
     const ws = new WebSocket("ws://157.173.101.159:9210");
-    const statusDot = document.querySelector("#connection-dot .absolute");
+    const statusDot = document.getElementById("connection-dot");
     const statusText = document.getElementById("status-text");
 
     ws.onopen = () => {
       statusDot.classList.remove('bg-red-500');
-      statusDot.classList.add('bg-green-500');
+      statusDot.classList.add('bg-green-500', 'status-success');
       statusText.innerText = "Reader Ready";
+      statusText.classList.add('text-green-400');
+      statusText.classList.remove('text-gray-300');
       showStatus("Server Connected", "success");
     };
 
@@ -304,20 +248,20 @@
       document.getElementById("balance").innerText = "RWF " + parseFloat(data.balance).toLocaleString(undefined, {minimumFractionDigits: 2});
       
       // Flash effect on update
-      const card = document.querySelector('.balance-card');
-      card.style.transform = 'scale(1.02)';
-      setTimeout(() => card.style.transform = 'scale(1)', 300);
+      const card = document.querySelector('.credit-card');
+      card.style.transform = 'scale(1.05) rotateX(5deg)';
+      setTimeout(() => card.style.transform = 'scale(1) rotateX(0deg)', 300);
     };
 
     function showStatus(message, type) {
       const el = document.getElementById("status-msg");
       el.innerText = message;
-      el.classList.remove('hidden', 'status-success', 'status-error');
+      el.classList.remove('hidden', 'text-green-400', 'text-red-400');
       
       if(type === 'success') {
-        el.classList.add('status-success');
+        el.classList.add('text-green-400');
       } else {
-        el.classList.add('status-error');
+        el.classList.add('text-red-400');
       }
 
       if(type === 'success') setTimeout(() => el.classList.add('hidden'), 4000);
@@ -336,8 +280,9 @@
         return;
       }
 
+      const originalContent = btn.innerHTML;
       btn.disabled = true;
-      btn.innerHTML = `<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> <span>Processing...</span>`;
+      btn.innerHTML = `<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> <span class="ml-2">Processing...</span>`;
 
       fetch("http://localhost:9210/topup", {
         method: "POST",
@@ -354,7 +299,7 @@
       })
       .finally(() => {
         btn.disabled = false;
-        btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg><span>Complete Transaction</span>`;
+        btn.innerHTML = originalContent;
       });
     }
   </script>

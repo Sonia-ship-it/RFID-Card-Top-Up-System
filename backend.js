@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-const PORT = 9213;
+const PORT = 9275;
 
 // Store balances per card UID
 const cardBalances = {};
