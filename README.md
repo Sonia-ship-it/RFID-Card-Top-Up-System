@@ -50,7 +50,7 @@ card/
 
 The system operates on a four-stage communication loop:
 
-1. **Detection**: Arduino scans a card and publishes the UID to `rfid/team_07/card/status`.
+1. **Detection**: Arduino scans a card and publishes the UID to `rfid/Nexora_001/card/status`.
 2. **Broker**: The MQTT broker relays the message to the Node.js server.
 3. **WebSocket**: The server pushes the new balance/UID to all connected browser clients.
 4. **Interaction**: Users perform top-ups via the UI, which triggers a POST request to update the state.
@@ -94,4 +94,4 @@ Clients receive a JSON object whenever a card is scanned or updated:
 
 ## 🧪 Development Team
 
-Developed with by **Team_07**.
+Developed with by **Nexora_001**.
