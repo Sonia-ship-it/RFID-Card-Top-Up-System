@@ -1,97 +1,298 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RFID Dashboard - team_07</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: 'Inter', sans-serif;
-      background-color: #0f172a;
-      background-image: radial-gradient(circle at top right, #1e293b, #0f172a);
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      position: relative;
+      overflow-x: hidden;
     }
-    .glass {
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+
+    /* Animated background particles */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
     }
-    .status-hide { display: none; }
+
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      animation: float 15s infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) translateX(0); }
+      25% { transform: translateY(-100px) translateX(50px); }
+      50% { transform: translateY(-200px) translateX(-50px); }
+      75% { transform: translateY(-100px) translateX(100px); }
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    .balance-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .balance-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(180deg); }
+    }
+
+    .pulse-ring {
+      animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes pulse-ring {
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.5;
+        transform: scale(1.1);
+      }
+    }
+
+    input:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-gradient {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      transition: all 0.3s ease;
+    }
+
+    .btn-gradient:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 40px -15px rgba(102, 126, 234, 0.5);
+    }
+
+    .btn-gradient:active {
+      transform: translateY(0);
+    }
+
+    .card-shine {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-shine::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.3) 50%,
+        transparent 70%
+      );
+      transform: rotate(45deg);
+      animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+
+    .status-success {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+    }
+
+    .status-error {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+    }
+
+    .connection-indicator {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      position: relative;
+    }
+
+    .status-dot::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 2px solid currentColor;
+      opacity: 0;
+      animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+
+    @keyframes ping {
+      75%, 100% {
+        transform: scale(2);
+        opacity: 0;
+      }
+    }
+
+    .card-icon {
+      width: 60px;
+      height: 45px;
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: white;
+      font-size: 18px;
+      box-shadow: 0 10px 25px -5px rgba(251, 191, 36, 0.4);
+    }
   </style>
 </head>
 
 <body class="flex items-center justify-center min-h-screen p-4">
 
-  <div class="w-full max-w-md bg-slate-900 rounded-[2.5rem] shadow-2xl border-8 border-slate-800 p-8 flex flex-col relative overflow-hidden">
-    
-    <div class="absolute -top-24 -left-24 w-48 h-48 bg-indigo-500/20 rounded-full blur-3xl"></div>
+  <!-- Animated background particles -->
+  <div class="particles">
+    <div class="particle" style="width: 80px; height: 80px; top: 10%; left: 10%; animation-delay: 0s;"></div>
+    <div class="particle" style="width: 60px; height: 60px; top: 70%; left: 80%; animation-delay: 2s;"></div>
+    <div class="particle" style="width: 100px; height: 100px; top: 40%; left: 70%; animation-delay: 4s;"></div>
+    <div class="particle" style="width: 40px; height: 40px; top: 80%; left: 20%; animation-delay: 1s;"></div>
+    <div class="particle" style="width: 70px; height: 70px; top: 20%; left: 60%; animation-delay: 3s;"></div>
+  </div>
 
-    <div class="relative z-10 text-center mb-8">
-      <div class="inline-flex items-center justify-center w-12 h-12 bg-indigo-600 rounded-xl mb-4 shadow-lg shadow-indigo-500/30">
-        <span class="text-2xl">⚡</span>
+  <!-- Main Container -->
+  <div class="w-full max-w-md relative z-10">
+    
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-20 h-20 rounded-3xl mb-4 bg-white/20 backdrop-blur-lg border border-white/30 shadow-2xl">
+        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"></path>
+        </svg>
       </div>
-      <h1 class="text-2xl font-bold text-white tracking-tight">RFID Terminal</h1>
-      <p class="text-slate-400 text-xs uppercase tracking-[0.2em] mt-1">team_07 • secure session</p>
+      <h1 class="text-4xl font-bold text-white mb-2 drop-shadow-lg">RFID Terminal</h1>
+      <p class="text-white/80 text-sm tracking-wider uppercase">team_07 • Secure Payment System</p>
     </div>
 
-    <div class="glass rounded-3xl p-6 mb-8 relative z-10 overflow-hidden">
-      <div class="flex justify-between items-start mb-10">
-        <div class="text-slate-400">
-          <p class="text-[10px] uppercase tracking-widest mb-1">Card Status</p>
-          <div id="connection-dot" class="flex items-center gap-2">
-            <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-            <span class="text-xs font-medium" id="status-text">Searching...</span>
+    <!-- Main Card -->
+    <div class="glass-card rounded-3xl p-8 mb-6 shadow-2xl">
+      
+      <!-- Connection Status -->
+      <div class="flex justify-between items-center mb-8 pb-6 border-b border-gray-200">
+        <div class="connection-indicator">
+          <div id="connection-dot" class="status-dot bg-red-500">
+            <span class="absolute inset-0 rounded-full bg-red-500"></span>
+          </div>
+          <span class="text-sm font-medium text-gray-700" id="status-text">Connecting...</span>
+        </div>
+        <div class="card-icon">VISA</div>
+      </div>
+
+      <!-- Balance Display Card -->
+      <div class="balance-card card-shine rounded-2xl p-6 mb-8 shadow-xl">
+        <div class="relative z-10">
+          <p class="text-white/70 text-xs uppercase tracking-widest mb-2">Available Balance</p>
+          <p id="balance" class="text-5xl font-bold text-white mb-4">RWF 0.00</p>
+          <div class="flex justify-between items-end">
+            <div>
+              <p class="text-white/70 text-xs uppercase tracking-wider mb-1">Card UID</p>
+              <p id="uid" class="text-sm font-mono text-white/90 tracking-wider">-- : -- : -- : --</p>
+            </div>
+            <svg class="w-12 h-12 text-white/20" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+            </svg>
           </div>
         </div>
-        <div class="text-indigo-400 font-bold italic tracking-tighter text-xl">VISA</div>
       </div>
 
-      <div class="mb-6">
-        <p class="text-[10px] text-slate-500 uppercase tracking-widest mb-1">Card UID</p>
-        <p id="uid" class="text-xl font-mono text-white tracking-wider">-- : -- : -- : --</p>
-      </div>
-
-      <div class="flex justify-between items-end">
+      <!-- Top-up Form -->
+      <div class="space-y-4">
         <div>
-          <p class="text-[10px] text-slate-500 uppercase tracking-widest mb-1">Available Balance</p>
-          <p id="balance" class="text-3xl font-bold text-white">RWF 0.00</p>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Top-up Amount (RWF)</label>
+          <div class="relative">
+            <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg font-semibold">RWF</span>
+            <input id="amt" type="number" placeholder="0.00" 
+                   class="w-full bg-gray-50 border-2 border-gray-200 text-gray-900 rounded-2xl pl-16 pr-4 py-4 text-xl font-semibold placeholder:text-gray-300 transition-all">
+          </div>
         </div>
-        <div class="w-10 h-10 opacity-20">
-            <svg fill="currentColor" viewBox="0 0 24 24" class="text-white"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
-        </div>
+
+        <button onclick="topup(event)" 
+                class="btn-gradient w-full text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-3 shadow-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          <span>Complete Transaction</span>
+        </button>
+
+        <div id="status-msg" class="text-sm text-center p-4 rounded-xl font-medium hidden shadow-lg"></div>
       </div>
     </div>
 
-    <div class="space-y-4 relative z-10">
-      <div>
-        <label class="text-xs text-slate-400 ml-1 mb-2 block">Top-up Amount</label>
-        <input id="amt" type="number" placeholder="0.00" 
-               class="w-full bg-slate-800 border border-slate-700 text-white rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-lg font-semibold placeholder:text-slate-600">
+    <!-- Footer -->
+    <div class="text-center">
+      <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-full px-6 py-3 border border-white/20">
+        <svg class="w-4 h-4 text-white/70" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+        </svg>
+        <p class="text-white/70 text-xs tracking-wide uppercase">Secured by Encryption</p>
       </div>
-
-      <button onclick="topup(event)" 
-              class="w-full bg-indigo-600 hover:bg-indigo-500 active:scale-[0.98] text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-3">
-        <span>Complete Transaction</span>
-      </button>
-
-      <div id="status-msg" class="text-sm text-center p-3 rounded-xl hidden"></div>
     </div>
 
-    <div class="mt-auto pt-8 text-center">
-      <p class="text-slate-500 text-[10px] tracking-wide">SYSTEM SECURED BY END-TO-END ENCRYPTION</p>
-    </div>
   </div>
 
   <script>
     let currentUID = null;
     const ws = new WebSocket("ws://157.173.101.159:9210");
-    const statusDot = document.querySelector("#connection-dot span");
+    const statusDot = document.querySelector("#connection-dot .absolute");
     const statusText = document.getElementById("status-text");
 
     ws.onopen = () => {
-      statusDot.classList.replace('bg-red-500', 'bg-emerald-500');
+      statusDot.classList.remove('bg-red-500');
+      statusDot.classList.add('bg-green-500');
       statusText.innerText = "Reader Ready";
       showStatus("Server Connected", "success");
     };
@@ -100,23 +301,23 @@
       const data = JSON.parse(e.data);
       currentUID = data.uid;
       document.getElementById("uid").innerText = data.uid;
-      document.getElementById("balance").innerText = "₦ " + parseFloat(data.balance).toLocaleString(undefined, {minimumFractionDigits: 2});
+      document.getElementById("balance").innerText = "RWF " + parseFloat(data.balance).toLocaleString(undefined, {minimumFractionDigits: 2});
       
       // Flash effect on update
-      const card = document.querySelector('.glass');
-      card.classList.add('ring-2', 'ring-indigo-500');
-      setTimeout(() => card.classList.remove('ring-2', 'ring-indigo-500'), 500);
+      const card = document.querySelector('.balance-card');
+      card.style.transform = 'scale(1.02)';
+      setTimeout(() => card.style.transform = 'scale(1)', 300);
     };
 
     function showStatus(message, type) {
       const el = document.getElementById("status-msg");
       el.innerText = message;
-      el.classList.remove('hidden', 'bg-emerald-500/10', 'text-emerald-400', 'bg-red-500/10', 'text-red-400');
+      el.classList.remove('hidden', 'status-success', 'status-error');
       
       if(type === 'success') {
-        el.classList.add('bg-emerald-500/10', 'text-emerald-400');
+        el.classList.add('status-success');
       } else {
-        el.classList.add('bg-red-500/10', 'text-red-400');
+        el.classList.add('status-error');
       }
 
       if(type === 'success') setTimeout(() => el.classList.add('hidden'), 4000);
@@ -136,7 +337,7 @@
       }
 
       btn.disabled = true;
-      btn.innerHTML = `<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Processing...`;
+      btn.innerHTML = `<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> <span>Processing...</span>`;
 
       fetch("http://localhost:9210/topup", {
         method: "POST",
@@ -146,14 +347,14 @@
       .then(res => res.json())
       .then(data => {
         document.getElementById("amt").value = "";
-        showStatus("Transaction Successful!", "success");
+        showStatus("✓ Transaction Successful!", "success");
       })
       .catch(err => {
-        showStatus("Transaction Failed", "error");
+        showStatus("✗ Transaction Failed", "error");
       })
       .finally(() => {
         btn.disabled = false;
-        btn.innerHTML = "Complete Transaction";
+        btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg><span>Complete Transaction</span>`;
       });
     }
   </script>
