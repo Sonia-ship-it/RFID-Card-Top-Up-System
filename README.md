@@ -41,7 +41,6 @@ card/
 
 
 
-🔗 **Access the UI:** [http://localhost:9275](http://localhost:9275)
 🔗 **Access the UI:** [http://157.173.101.159:9275](157.173.101.159:9275)
 
 ---
